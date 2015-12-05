@@ -1,7 +1,7 @@
 {
-  "name": "closer",
-  "description": "Clojure parser and core library in JavaScript, compatible with the Mozilla Parser API.",
-  "homepage": "http://github.com/vickychijwani/closer.js",
+  "name": "clojs",
+  "description": "ClojureJS - Clojure parser and core library in JavaScript",
+  "homepage": "https://github.com/Diullei/clojs",
   "main": "lib/src/index.js",
   "files": [
     "package.json",
@@ -16,13 +16,13 @@
     "node": ">=0.10.24"
   },
   "author": {
-    "name": "Vicky Chijwani",
-    "email": "vickychijwani@gmail.com",
-    "url": "http://vickychijwani.github.io/"
+    "name": "Diullei Gomes",
+    "email": "diullei@gmail.com",
+    "url": "http://diullei.github.io/"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/vickychijwani/closer.js"
+    "url": "https://github.com/Diullei/clojs"
   },
   "keywords": [
     "parser",
