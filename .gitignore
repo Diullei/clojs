@@ -4,5 +4,5 @@ node_modules
 /demo/coverage/
 /demo/js/src/
 /demo/js/spec/
-/lib/
+/built/
 /.grunt/
