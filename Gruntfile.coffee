@@ -8,14 +8,14 @@ module.exports = (grunt) ->
       jison:
         command: [
           'jison src/grammar.y src/lexer.l -o src/parser.js'
-          'mkdir -p lib/src/'
-          'cp src/parser.js lib/src/'
+          'mkdir -p built/src/'
+          'cp src/parser.js built/src/'
         ].join if process.platform.match /^win/ then '&' else '&&'
 
     jasmine_test:
-      all: ['lib/spec/']
+      all: ['built/spec/']
       options:
-        specFolders: ['lib/spec/']
+        specFolders: ['built/spec/']
         showColors: true
         includeStackTrace: false
         forceExit: true
@@ -25,12 +25,12 @@ module.exports = (grunt) ->
       coverage:
         savePath: 'demo/coverage/'
         report: ['html']
-        excludes: ['lib/spec/*.js']
+        excludes: ['built/spec/*.js']
         thresholds:
           lines: 75
-      all: ['lib/spec/']
+      all: ['built/spec/']
       options:
-        specFolders: ['lib/spec/']
+        specFolders: ['built/spec/']
         showColors: true
         includeStackTrace: false
         forceExit: true
@@ -54,12 +54,12 @@ module.exports = (grunt) ->
           level: 'error'
 
     coffee:
-      lib:
+      built:
         files: [
           expand: true         # Enable dynamic expansion.
           cwd: 'src/'          # Src matches are relative to this path.
           src: ['**/*.coffee'] # Actual pattern(s) to match.
-          dest: 'lib/src/'         # Destination path prefix.
+          dest: 'built/src/'         # Destination path prefix.
           ext: '.js'           # Dest filepaths will have this extension.
         ]
       specs:
@@ -67,7 +67,7 @@ module.exports = (grunt) ->
           expand: true         # Enable dynamic expansion.
           cwd: 'spec/'         # Src matches are relative to this path.
           src: ['**/*.coffee'] # Actual pattern(s) to match.
-          dest: 'lib/spec/'    # Destination path prefix.
+          dest: 'built/spec/'    # Destination path prefix.
           ext: '.js'           # Dest filepaths will have this extension.
         ]
 
@@ -75,7 +75,7 @@ module.exports = (grunt) ->
       demo:
         files: [
           expand: true
-          cwd: 'lib/'
+          cwd: 'built/'
           src: ['src/repl.js', 'spec/<%= pkg.name %>-spec.js', 'spec/functional-spec.js',
                 'spec/<%= pkg.name %>-core-spec.js']
           dest: 'demo/js/'
