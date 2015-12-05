@@ -1,7 +1,7 @@
 var ___$closer = require("./lib/src/index");
 var core = ___$closer.core;
 
-var grunt_config = require('./test');
+var grunt_config = require('./gruntfile-config');
 
 var to_js_obj = (function () {
 	function getValue(item) {
@@ -30,6 +30,8 @@ var to_js_obj = (function () {
 			var val = core.nth(values, i);
 			if (core.map_$QMARK_.call(null, val)) {
 				result.push(hash_to_js_obj(val));
+			} else if (core.vector_$QMARK_.call(null, val)) {
+				result.push(to_array(val));
 			} else {
 				result.push(val);
 			}
@@ -55,12 +57,26 @@ var to_js_obj = (function () {
 })(core);
 
 //console.log(grunt_config);
-
+/*
 var grunt = {
 	file: {
 		readJSON: function(a){console.log(a)}
 	}
 };
-
+*/
 //console.log(grunt_config.cfg(grunt));
-console.log(require('util').inspect(to_js_obj(grunt_config.cfg(grunt)), false,10,true));
+//console.log(require('util').inspect(to_js_obj(grunt_config.cfg(grunt)), false,10,true));
+
+module.exports = function(grunt) {
+	var cfg = to_js_obj(grunt_config.cfg(grunt));
+	grunt.initConfig(cfg.init_config);
+	cfg.grunt.load_npm_tasks.forEach(function (task) {
+		grunt.loadNpmTasks(task);
+	});
+	cfg.grunt.rename_task.forEach(function (rename) {
+		grunt.renameTask(rename[0], rename[1]);
+	});
+	for (var attr in cfg.grunt.register_task) {
+		grunt.registerTask(attr, cfg.grunt.register_task[attr]);
+	}	
+}
