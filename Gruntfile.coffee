@@ -12,14 +12,11 @@ module.exports = (grunt) ->
           'cp src/parser.js built/src/'
         ].join if process.platform.match /^win/ then '&' else '&&'
 
-    lkg:
-      options:
-        failOnError: true
-      jison:
+      lkg:
         command: [
           'rm -rf ./lib'
           'mkdir -p lib/src/'
-          'cp built/src/*.js built/src/'
+          'cp built/src/*.js lib/src/'
         ].join if process.platform.match /^win/ then '&' else '&&'
 
     jasmine_test:
@@ -115,4 +112,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['coffeelint', 'shell:jison', 'coffee']
   grunt.registerTask 'test', ['build', 'jasmine_test']
   grunt.registerTask 'default', ['build', 'browserify', 'jasmine_node']
-  grunt.registerTask 'LKG', ['build', 'jasmine_test', 'lkg']
+  grunt.registerTask 'LKG', ['build', 'jasmine_test', 'shell:lkg']
