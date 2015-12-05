@@ -695,6 +695,10 @@ describe 'Closer core library', ->
       eq '(last #{1 2 3})', 3
       eq '(last {1 2 3 4})', vec 3, 4
 
+  describe '(interpose pos coll)', ->
+    it 'interpositions', ->
+      eq '(interpose "," [1 2])', seq [1, ",", 2]
+
   describe '(nth coll index not-found)', ->
     it 'returns the value at index in coll, takes O(n) time on lists and seqs', ->
       throws '(nth [1 2] 0 0 0)'

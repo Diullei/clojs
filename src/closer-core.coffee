@@ -334,6 +334,10 @@ core =
     assertions.arity 1, arguments.length
     m.last coll
 
+  'interpose': (sep, coll) ->
+    assertions.arity 2, arguments.length
+    m.interpose(sep, coll)
+
   'nth': (coll, index, notFound) ->
     assertions.arity 2, 3, arguments.length
     assertions.sequential coll
