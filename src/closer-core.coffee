@@ -714,6 +714,54 @@ core =
     assertions.arity 1, Infinity, arguments.length
     return arguments.length is m.count(m.set args)
     
+  #####################################################################
+  'to_js_obj' : (->
+  
+    getValue = (item) ->
+      if core.vector_$QMARK_(item)
+        to_array item
+      else if core.map_$QMARK_(item)
+        hash_to_js_obj item
+      else
+        item
+  
+    hash_to_js_obj = (values) ->
+      obj = {}
+      iter = values.keys()
+      next = null
+      while !(next = iter.next()).done
+        obj[next.value.toString().substr(1)] = getValue(values.get(next.value))
+      obj
+  
+    to_array = (values) ->
+      result = []
+      i = 0
+      while i < core.count(values)
+        val = core.nth(values, i)
+        if core.map_$QMARK_(val)
+          result.push hash_to_js_obj(val)
+        else if core.vector_$QMARK_(val)
+          result.push to_array(val)
+        else
+          result.push val
+        i++
+      result
+  
+    to_js_obj = (values) ->
+      obj = {}
+      i = 0
+      while i < core.count(values)
+        if i % 2 == 0
+          if !core.keyword_$QMARK_(core.nth(values, i))
+            throw new Error('Invalid dic')
+          else
+            obj[core.nth(values, i).toString().substr(1)] = getValue(core.nth(values, ++i))
+        i++
+      obj
+  
+    to_js_obj
+  )(core)
+  #####################################################################
 
 bind = (that, args) ->
   for i in [0...args.length]
