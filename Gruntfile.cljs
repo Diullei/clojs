@@ -73,7 +73,6 @@
           :gh-pages {:src ["**"]
                     :options {:base "demo/"
                               :push true}}]))
-
       ((.loadNpmTasks grunt) "grunt-shell")
       ((.loadNpmTasks grunt) "grunt-contrib-watch")
       ((.loadNpmTasks grunt) "grunt-coffeelint")
@@ -83,9 +82,7 @@
       ;; grunt-jasmine-node is for tests, grunt-jasmine-node-coverage is for code coverage
       ((.loadNpmTasks grunt) "grunt-jasmine-node")
       ((.loadNpmTasks grunt) "grunt-jasmine-node-coverage")
-              
       ((.renameTask grunt) "jasmine_node" "jasmine_test")
-      
       ((.registerTask grunt) "build" (to_array ["coffeelint" "shell:jison" "coffee"]))
       ((.registerTask grunt) "test" (to_array["build" "jasmine_test"]))
       ((.registerTask grunt) "default" (to_array ["build" "browserify" "jasmine_node"]))
