@@ -1,5 +1,5 @@
 (set! 
-  (.init exports) 
+  (.exports module) 
   (fn 
     [grunt]
     (do
