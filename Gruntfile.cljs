@@ -86,4 +86,4 @@
       ((.registerTask grunt) "build" (clj->js ["coffeelint" "shell:jison" "coffee"]))
       ((.registerTask grunt) "test" (clj->js ["build" "jasmine_test"]))
       ((.registerTask grunt) "default" (clj->js ["build" "browserify" "jasmine_node"]))
-      ((.registerTask grunt) "LKG" (clj->js ["build" "jasmine_test" "shell:lkg"])))))
+      ((.registerTask grunt) "LKG" (clj->js ["build" "shell:lkg"])))))
