@@ -4,7 +4,7 @@
     [grunt]
     (do
       ((.initConfig grunt) 
-        (to_js_obj [
+        (clj->js {
           :pkg ((.readJSON (.file grunt)) "package.json")
           :shell {:options {:failOnError false}
                   :jison {:command (apply 
@@ -72,7 +72,7 @@
                               :options {:exclude ["lodash-node"]}}}
           :gh-pages {:src ["**"]
                     :options {:base "demo/"
-                              :push true}}]))
+                              :push true}}}))
       ((.loadNpmTasks grunt) "grunt-shell")
       ((.loadNpmTasks grunt) "grunt-contrib-watch")
       ((.loadNpmTasks grunt) "grunt-coffeelint")
@@ -83,7 +83,7 @@
       ((.loadNpmTasks grunt) "grunt-jasmine-node")
       ((.loadNpmTasks grunt) "grunt-jasmine-node-coverage")
       ((.renameTask grunt) "jasmine_node" "jasmine_test")
-      ((.registerTask grunt) "build" (to_array ["coffeelint" "shell:jison" "coffee"]))
-      ((.registerTask grunt) "test" (to_array["build" "jasmine_test"]))
-      ((.registerTask grunt) "default" (to_array ["build" "browserify" "jasmine_node"]))
-      ((.registerTask grunt) "LKG" (to_array["build" "jasmine_test" "shell:lkg"])))))
+      ((.registerTask grunt) "build" (clj->js ["coffeelint" "shell:jison" "coffee"]))
+      ((.registerTask grunt) "test" (clj->js ["build" "jasmine_test"]))
+      ((.registerTask grunt) "default" (clj->js ["build" "browserify" "jasmine_node"]))
+      ((.registerTask grunt) "LKG" (clj->js ["build" "jasmine_test" "shell:lkg"])))))
