@@ -1,3 +1,9 @@
+(def closer (require "./lib/src/index"))
+(def escodegen (require "escodegen"))
+
+(def core (.core closer))
+(def closerAssertions (.assertions closer))
+
 (set!
  (.exports module)
  (fn
