@@ -11,9 +11,6 @@
 (def proc (js->clj (.argv process)))
 
 (def file (nth proc 2))
-(def lib (if (nil? (nth proc 3))
-           "closer"
-           (nth proc 3)))
 
 (def code (.toString (.readFileSync fs file)))
 

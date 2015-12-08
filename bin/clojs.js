@@ -6,7 +6,6 @@ var fs = require.call(this, 'fs');
 var path = require.call(this, 'path');
 var proc = core.js_$__$GT_clj.call(this, typeof process['argv'] === 'function' && process['argv'].length === 0 ? process['argv']() : process['argv']);
 var file = core.nth.call(this, proc, 2);
-var lib = core.nil_$QMARK_.call(this, core.nth.call(this, proc, 3)) ? 'closer' : core.nth.call(this, proc, 3);
 var code = typeof fs['readFileSync'](file)['toString'] === 'function' && fs['readFileSync'](file)['toString'].length === 0 ? fs['readFileSync'](file)['toString']() : fs['readFileSync'](file)['toString'];
 var ast = closer['parse'](code, core.clj_$__$GT_js.call(this, core.hash_$_map(core.keyword('coreIdentifier'), 'core')));
 var compiled = escodegen['generate'](ast);
