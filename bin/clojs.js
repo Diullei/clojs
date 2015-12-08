@@ -1,5 +1,6 @@
 var closer = require.call(this, '../lib/src/index');
 var escodegen = require.call(this, 'escodegen');
+var optionator = require.call(this, 'optionator');
 var core = typeof closer['core'] === 'function' && closer['core'].length === 0 ? closer['core']() : closer['core'];
 var closerAssertions = typeof closer['assertions'] === 'function' && closer['assertions'].length === 0 ? closer['assertions']() : closer['assertions'];
 var fs = require.call(this, 'fs');
