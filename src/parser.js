@@ -278,11 +278,8 @@ break;
 case 43:
 
         var yyloc = yy.loc(_$[$0-4])
-        //var catchBody = $$[$0-1]
-        //if (catchBody === null) {
         var nilNode = parseLiteral('Nil', null, yy.loc(_$[$0-4]), null, yy);
         var catchBody = yy.Node('ExpressionStatement', nilNode, nilNode.loc);
-        //}
         this.$ = yy.Node('CatchClause', $$[$0-2], null, yy.Node('BlockStatement', [getValueIfUndefined($$[$0-1], catchBody)], yyloc), yyloc);
     
 break;
