@@ -36,36 +36,36 @@
   (.exit process 1))
 
 (defn compile-script-from-str
-	[code]
-	(do
-		(def ast
-		  (.parse closer code (clj->js {:coreIdentifier "core"})))
-		(.generate escodegen ast)))
+  [code]
+  (do
+    (def ast
+      (.parse closer code (clj->js {:coreIdentifier "core"})))
+    (.generate escodegen ast)))
 
 (defn compile-script
-	[file]
-	(do
-		(def code (.toString (.readFileSync fs file)))
-		(def compiled (compile-script-from-str code))
-		(.writeFile fs (apply str (.dirname path file) "/" (.basename path file ".cljs") ".js") compiled
-		            (fn [err]
-		              (if (not (nil? err))
-		                (.log console err))))))
+  [file]
+  (do
+    (def code (.toString (.readFileSync fs file)))
+    (def compiled (compile-script-from-str code))
+    (.writeFile fs (apply str (.dirname path file) "/" (.basename path file ".cljs") ".js") compiled
+                (fn [err]
+                  (if (not (nil? err))
+                    (.log console err))))))
 
 (def proc (js->clj (.argv process)))
 
 (if (= (count proc) 2)
-	(def closer (require "../lib/src/start-repl"))
-	(try
-	  (do
-			(def command-options ((.parse opt) (.argv process)))
-			(if (.compile command-options)
-				(compile-script (first (._ command-options)))
-				(if (.help command-options)
-					(println ((.generateHelp opt) (clj->js {:interpolate {:version "0.0.0"}})))
-					(if (.version command-options)
-						(println "version 0.0.0")
-						(if (.eval command-options)
-							(compile-script-from-str (._ command-options)))))))
-	  (catch e
-	         (die! (.message e)))))
+  (def closer (require "../lib/src/start-repl"))
+  (try
+    (do
+      (def command-options ((.parse opt) (.argv process)))
+      (if (.compile command-options)
+        (compile-script (first (._ command-options)))
+        (if (.help command-options)
+          (println ((.generateHelp opt) (clj->js {:interpolate {:version "0.0.0"}})))
+          (if (.version command-options)
+            (println "version 0.0.0")
+            (if (.eval command-options)
+              (compile-script-from-str (._ command-options)))))))
+    (catch e
+           (die! (.message e)))))
