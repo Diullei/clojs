@@ -202,6 +202,23 @@ AnonFnLiteral
     }
   ;
 
+// (catch ...)
+CatchExpr
+    : '(' CATCH Identifier SExprStmt?[body] ')' {
+        var yyloc = yy.loc(@1)
+        var nilNode = parseLiteral('Nil', null, yy.loc(@1), null, yy);
+        var catchBody = yy.Node('ExpressionStatement', nilNode, nilNode.loc);
+        $$ = yy.Node('CatchClause', $Identifier, null, yy.Node('BlockStatement', [getValueIfUndefined($body, catchBody)], yyloc), yyloc);
+    }
+;
+
+// (try ...)
+TryClauseExpr
+    : TRY SExprStmt[body] CatchExpr {
+        $$ = yy.Node('TryStatement', yy.Node('BlockStatement', [$body], yy.loc(@1)), [$CatchExpr], null, yy.loc(@1));
+    }
+;
+
 ConditionalExpr
   : IF SExpr[test] SExprStmt[consequent] SExprStmt?[alternate] {
         $$ = yy.Node('IfStatement', $test, $consequent, getValueIfUndefined($alternate, null), yy.loc(@1));
@@ -452,6 +469,7 @@ List
   : { $$ = yy.Node('EmptyStatement', yy.loc(@1)); }
   | FnDefinition
   | ConditionalExpr
+  | TryClauseExpr
   | LogicalExpr
   | VarDeclaration
   | LetForm
@@ -557,7 +575,7 @@ var expressionTypes = ['ThisExpression', 'ArrayExpression', 'ObjectExpression',
     'FunctionExpression', 'ArrowExpression', 'SequenceExpression', 'Identifier',
     'UnaryExpression', 'BinaryExpression', 'AssignmentExpression', 'Literal',
     'UpdateExpression', 'LogicalExpression', 'ConditionalExpression',
-    'NewExpression', 'CallExpression', 'MemberExpression'];
+    'NewExpression', 'CallExpression', 'MemberExpression'/*, 'TryClauseExpression'*/];
 
 // indices for generated identifiers
 var destrucArgIdx, doseqIdx, dotimesIdx;

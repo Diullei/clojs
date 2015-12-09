@@ -69,6 +69,8 @@ ANON_ARG        \%(\&|[1-9]|1[0-9]|20)?
 <fnpos>'doseq'      { this.begin('INITIAL'); return 'DOSEQ'; }
 <fnpos>'while'      { this.begin('INITIAL'); return 'WHILE'; }
 <fnpos>'new'        { this.begin('INITIAL'); return 'NEW'; }
+<fnpos>'try'        { this.begin('INITIAL'); return 'TRY'; }
+<fnpos>'catch'      { this.begin('INITIAL'); return 'CATCH'; }
 
 /* destructuring forms */
 ':as'           { this.begin('INITIAL'); return 'AS'; }

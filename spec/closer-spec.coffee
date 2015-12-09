@@ -273,6 +273,11 @@ describe 'Closer parser', ->
           [ThisExpression(), HashMap(Keyword('key'), Keyword('val'))])))
 
 
+  ##########
+  describe 'TryCatch forms', ->
+
+    it 'throws when given empty try forms', ->
+      throws '(try)'
 
   ##########
   describe 'Conditional forms', ->
