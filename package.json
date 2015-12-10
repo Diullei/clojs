@@ -2,7 +2,7 @@
   "name": "clojs",
   "description": "ClojureJS - Clojure parser and core library in JavaScript",
   "homepage": "https://github.com/Diullei/clojs",
-  "main": "lib/src/index.js",
+  "main": "bin/cljsc",
   "files": [
     "package.json",
     "LICENSE",
