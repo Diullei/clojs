@@ -5,6 +5,7 @@
 (def closer (require "../lib/src/index"))
 (def escodegen (require "escodegen"))
 (def optionator (require "optionator"))
+(def pkg (require "../package.json"))
 
 (def core (.core closer))
 (def closerAssertions (.assertions closer))
@@ -62,9 +63,9 @@
       (if (.compile command-options)
         (compile-script (first (._ command-options)))
         (if (.help command-options)
-          (println ((.generateHelp opt) (clj->js {:interpolate {:version "0.0.0"}})))
+          (println ((.generateHelp opt) (clj->js {:interpolate {:version (.version pkg)}})))
           (if (.version command-options)
-            (println "version 0.0.0")
+            (println (str "version " (.version pkg)))
             (if (.eval command-options)
               (compile-script-from-str (._ command-options)))))))
     (catch e
