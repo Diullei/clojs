@@ -19,6 +19,11 @@
                                            ["jison src/grammar.y src/lexer.l -o src/parser.js"
                                             "mkdir -p built/src/"
                                             "cp src/parser.js built/src/"]))}
+                        :cljs_build {:command (apply
+                                          str
+                                          (interpose
+                                           (if (.match (.platform process) "^win") " & " " && ")
+                                           ["node bin/cljsc -c -o built/src $(ls src/*.cljs)"]))}
                         :lkg {:command (apply
                                         str
                                         (interpose
@@ -86,7 +91,7 @@
      (.loadNpmTasks grunt "grunt-jasmine-node")
      (.loadNpmTasks grunt "grunt-jasmine-node-coverage")
      (.renameTask grunt "jasmine_node" "jasmine_test")
-     (.registerTask grunt "build" (clj->js ["coffeelint" "shell:jison" "coffee"]))
+     (.registerTask grunt "build" (clj->js ["coffeelint" "shell:jison" "coffee" "shell:cljs_build"]))
      (.registerTask grunt "test" (clj->js ["build" "jasmine_test"]))
      (.registerTask grunt "default" (clj->js ["build" "browserify" "jasmine_node"]))
      (.registerTask grunt "LKG" (clj->js ["build" "shell:lkg"])))))
