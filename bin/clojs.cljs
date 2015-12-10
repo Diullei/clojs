@@ -26,6 +26,10 @@
                                           :alias "c"
                                           :type "Boolean"
                                           :description "compile to JavaScript and save as .js files"}
+                                         {:option "output",
+                                          :alias "o",
+                                          :type "path::String",
+                                          :description "compile into the specified directory"}
                                          {:option "eval"
                                           :alias "e"
                                           :type "code::String"
@@ -44,11 +48,11 @@
     (.generate escodegen ast)))
 
 (defn compile-script
-  [file]
+  [file out]
   (do
     (def code (.toString (.readFileSync fs file)))
     (def compiled (compile-script-from-str code))
-    (.writeFile fs (apply str (.dirname path file) "/" (.basename path file ".cljs") ".js") compiled
+    (.writeFile fs (apply str (if out out (.dirname path file)) "/" (.basename path file ".cljs") ".js") compiled
                 (fn [err]
                   (if (not (nil? err))
                     (.log console err))))))
@@ -61,7 +65,7 @@
     (do
       (def command-options ((.parse opt) (.argv process)))
       (if (.compile command-options)
-        (compile-script (first (._ command-options)))
+        (compile-script (first (._ command-options)) (.output command-options))
         (if (.help command-options)
           (println ((.generateHelp opt) (clj->js {:interpolate {:version (.version pkg)}})))
           (if (.version command-options)
