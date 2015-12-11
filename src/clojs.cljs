@@ -2,10 +2,11 @@
 (def path (require "path"))
 (def util (require "util"))
 
-(def closer (require "../lib/src/index"))
 (def escodegen (require "escodegen"))
 (def optionator (require "optionator"))
-(def pkg (require "../package.json"))
+
+(def closer (require "./index"))
+(def pkg (require "../../package.json"))
 
 (def core (.core closer))
 (def closerAssertions (.assertions closer))
@@ -30,6 +31,10 @@
                                           :alias "o",
                                           :type "path::String",
                                           :description "compile into the specified directory"}
+                                          {:option "ast",
+                                           :alias "a",
+                                           :type "Boolean",
+                                           :description "Sow AST"}
                                          {:option "eval"
                                           :alias "e"
                                           :type "code::String"
@@ -47,6 +52,12 @@
       (.parse closer code (clj->js {:coreIdentifier "core"})))
     (.generate escodegen ast)))
 
+(defn compile-script-from-str-ast
+  [code]
+  (do
+    (def ast (.parse closer code (clj->js {:coreIdentifier "core"})))
+    ast))
+
 (defn compile-script
   [file out]
   (do
@@ -60,7 +71,7 @@
 (def proc (js->clj (.argv process)))
 
 (if (= (count proc) 2)
-  (def closer (require "../lib/src/start-repl"))
+  (def closer (require "./start-repl"))
   (try
     (do
       (def command-options ((.parse opt) (.argv process)))
@@ -71,6 +82,8 @@
           (if (.version command-options)
             (println (str "version " (.version pkg)))
             (if (.eval command-options)
-              (compile-script-from-str (._ command-options)))))))
+              (println (eval (compile-script-from-str (.eval command-options))))
+              (if (.ast command-options)
+                (println (eval (compile-script-from-str-ast (.eval command-options))))))))))
     (catch e
            (die! (.message e)))))

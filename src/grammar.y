@@ -272,7 +272,11 @@ LogicalExpr
   ;
 
 VarDeclaration
-  : DEF Identifier SExpr?[init] { $$ = parseVarDecl($Identifier, $init, yy.loc(@$), yy); }
+  //: DEF Identifier SExpr?[init] { $$ = parseVarDecl($Identifier, $init, yy.loc(@$), yy); }
+  : DEF Identifier SExpr?[init] {
+      //$$ = parseVarDecl($Identifier, $init, yy.loc(@$), yy);
+      $$ = yy.Node('AssignmentExpression', '=', $Identifier, $init, yy.loc(@1));
+    }
   ;
 
 LetBinding

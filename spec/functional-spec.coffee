@@ -14,6 +14,8 @@ beforeEach ->
 evaluate = (src, options) ->
   eval repl.generateJS src, options
 
+bk_min = closerCore.min
+
 eq = (src, expected) -> expect(evaluate src).toCljEqual expected
 throws = (src) -> expect(-> evaluate src).toThrow()
 truthy = (src) -> expect(evaluate src).toCljEqual true
@@ -46,14 +48,23 @@ __$this = (() ->
 describe 'Functional tests', ->
 
   it 'identifiers can shadow core functions', ->
+    evaluate "(def min bk_min)"
     eq '(min 1 2 3)', 1
+    evaluate "(def min bk_min)"
     throws '(def min 2), (min 1 2 3)'  # min is shadowed, so is not a function
+    evaluate "(def min bk_min)"
     throws '(defn min [x] x), (min 1 2 3)'  # min is shadowed, so is a function that can accept only 1 param
+    evaluate "(def min bk_min)"
     eq '(def min 2), min', 2
-    eq '(let [] (def min 2)), (min 1 2 3)', 1  # still works
+    evaluate "(def min bk_min)"
+    throws '(let [] (def min 2)), (min 1 2 3)', 1  # min is shadowed, so is not a function
+    evaluate "(def min bk_min)"
     eq '(def m (min 1 2 3)), (let [] (def min 2)), m', 1  # still works
+    evaluate "(def min bk_min)"
     throws '(defn blah [min] (min 1 2 3)), (blah 2)'
+    evaluate "(def min bk_min)"
     eq '(defn blah [min] (min 1 2 3)), (blah min)', 1  # still works because core.min is passed into blah's scope
+    evaluate "(def min bk_min)"
     eq '[(min 1 2 3), (let [min 1 max 9] (range min max)), (min 1 2 3), ((fn [min max] (range min max)) 1 9)]',
       vec 1, seq([1...9]), 1, seq([1...9])
 

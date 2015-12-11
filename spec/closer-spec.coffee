@@ -605,17 +605,19 @@ describe 'Closer parser', ->
   describe 'Vars', ->
     it 'parses unbound var definitions', ->
       eq '(def var-name)', Program(
-        VariableDeclaration(
-          VariableDeclarator(
+        ExpressionStatement(
+          AssignmentExpression(
             Identifier('var_$_name'),
-            null)))
+            undefined)))
 
     it 'parses vars bound to literals', ->
       eq '(def greeting \"Hello\")', Program(
-        VariableDeclaration(
-          VariableDeclarator(
+        ExpressionStatement(
+          AssignmentExpression(
             Identifier('greeting'),
             String('Hello'))))
+
+
 
     it 'throws when given def forms with > 2 arguments', ->
       throws '(def a 2 3)'
@@ -623,8 +625,8 @@ describe 'Closer parser', ->
 
     it 'parses vars bound to expressions', ->
       eq '(def sum (+ 3 5))', Program(
-        VariableDeclaration(
-          VariableDeclarator(
+        ExpressionStatement(
+          AssignmentExpression(
             Identifier('sum'),
             CallExpression(
               MemberExpression(Identifier('_$PLUS_'), Identifier('call')),
@@ -632,8 +634,8 @@ describe 'Closer parser', ->
 
     it 'parses vars bound to fn forms', ->
       eq '(def add (fn [& numbers] (apply + numbers)))', Program(
-        VariableDeclaration(
-          VariableDeclarator(
+        ExpressionStatement(
+          AssignmentExpression(
             Identifier('add'),
             FunctionExpression(
               null, [], null,
