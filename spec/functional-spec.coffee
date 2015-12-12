@@ -30,6 +30,9 @@ list = (xs...) -> closerCore.list.apply null, _.flatten xs
 set = (xs...) -> closerCore.hash_$_set.apply null, _.flatten xs
 map = (xs...) -> closerCore.hash_$_map.apply null, _.flatten xs
 
+__$this = null
+
+###
 __$this = (() ->
   class Soldier
     constructor: (enemy = null) ->
@@ -43,7 +46,7 @@ __$this = (() ->
 
   new Soldier(new Soldier())
 )()
-
+###
 
 describe 'Functional tests', ->
 
@@ -75,6 +78,7 @@ describe 'Functional tests', ->
   it 'closures', ->
     eq '(defn adder [x] (fn [y] (+ x y))), (def add-3 (adder 3)), (add-3 4)', 7
 
+  ###
   it 'js interop - \'this\' access', ->
     __$this['move-x-y'](0, 0)
     __$this.enemy['move-x-y'](10, 20)
@@ -83,6 +87,7 @@ describe 'Functional tests', ->
 
         [(.x (.pos this)) (.y (.pos this))]',
       vec 10, 20
+  ###
 
   it 'loop + recur', ->
     eq '(loop [x 5 coll []]
