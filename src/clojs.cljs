@@ -42,27 +42,23 @@
 
 (defn die!
   [message]
-  (.error console message)
-  (.exit process 1))
+  (do
+    (.error console message)
+    (.exit process 1)))
+
+(defn parse
+  [code]
+  (.parse closer code (clj->js {:coreIdentifier "core"})))
 
 (defn compile-script-from-str
   [code]
-  (do
-    (def ast
-      (.parse closer code (clj->js {:coreIdentifier "core"})))
+  (let [ast (parse code)]
     (.generate escodegen ast)))
-
-(defn compile-script-from-str-ast
-  [code]
-  (do
-    (def ast (.parse closer code (clj->js {:coreIdentifier "core"})))
-    ast))
 
 (defn compile-script
   [file out]
-  (do
-    (def code (.toString (.readFileSync fs file)))
-    (def compiled (compile-script-from-str code))
+  (let [code (.toString (.readFileSync fs file))
+        compiled (compile-script-from-str code)]
     (.writeFile fs (apply str (if out out (.dirname path file)) "/" (.basename path file ".cljs") ".js") compiled
                 (fn [err]
                   (if (not (nil? err))
@@ -71,10 +67,9 @@
 (def proc (js->clj (.argv process)))
 
 (if (= (count proc) 2)
-  (def closer (require "./start-repl"))
+  (require "./start-repl")
   (try
-    (do
-      (def command-options ((.parse opt) (.argv process)))
+    (let [command-options ((.parse opt) (.argv process))]
       (if (.compile command-options)
         (compile-script (first (._ command-options)) (.output command-options))
         (if (.help command-options)
@@ -84,6 +79,6 @@
             (if (.eval command-options)
               (println (eval (compile-script-from-str (.eval command-options))))
               (if (.ast command-options)
-                (println (eval (compile-script-from-str-ast (.eval command-options))))))))))
+                (println (eval (parse (.eval command-options))))))))))
     (catch e
            (die! (.message e)))))
