@@ -17,9 +17,9 @@ defaults =
 
     try
       opts = { loc: false }
-      console.log '\nAST: ' + JSON.stringify repl.parse(input, opts), null, 4
+      #console.log '\nAST: ' + JSON.stringify repl.parse(input, opts), null, 4
       js = repl.generateJS input, opts
-      console.log '\nGenerated JS:\n' + js + '\n'
+      #console.log '\nGenerated JS:\n' + js + '\n'
       result = vm.runInThisContext js
     catch e
     callback (if e then (e.name + ': ' + e.message) else e), result

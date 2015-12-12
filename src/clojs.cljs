@@ -33,7 +33,7 @@
                                           :description "compile into the specified directory"}
                                           {:option "ast",
                                            :alias "a",
-                                           :type "Boolean",
+                                           :type "code::String",
                                            :description "Sow AST"}
                                          {:option "eval"
                                           :alias "e"
@@ -79,6 +79,6 @@
             (if (.eval command-options)
               (println (eval (compile-script-from-str (.eval command-options))))
               (if (.ast command-options)
-                (println (eval (parse (.eval command-options))))))))))
+                (println ((.stringify JSON) (parse (.ast command-options)) null 2))))))))
     (catch e
            (die! (.message e)))))
